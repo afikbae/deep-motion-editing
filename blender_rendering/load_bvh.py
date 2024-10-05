@@ -9,7 +9,7 @@ import mathutils
 import pdb
 
 #scale factor for bone length
-global_scale = 10
+global_scale = 1
 
 class BVH_file:
     def __init__(self, file_path):
@@ -33,6 +33,9 @@ class BVH_file:
 
         self.joint_num = self.anim.rotations.shape[1]
         self.frame_num = self.anim.rotations.shape[0]
+
+        self.anim.offsets[0, 2] += 15
+        self.anim.positions[:, 0, 2] += 15
 
         self.normalize()
 
@@ -82,7 +85,7 @@ def add_bone(offset, parent_obj, name):
     theta = np.math.acos(base.dot(target))
     rot = mathutils.Quaternion(axis, theta)
 
-    bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=0.022 * global_scale, radius2=0.0132 * global_scale, depth=length, enter_editmode=False, location=center)
+    bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=0.11 * global_scale, radius2=0.066 * global_scale, depth=length, enter_editmode=False, location=center)
     new_bone = bpy.context.object
     new_bone.name = name
     new_bone.rotation_mode = 'QUATERNION'
