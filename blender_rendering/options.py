@@ -29,6 +29,8 @@ class Options:
         self.parser.add_argument('--resX', type=int, default=960, help='x resolution')
         self.parser.add_argument('--resY', type=int, default=540, help='y resolution')
 
+        self.parser.add_argument('--site_locations_path', type=str, default='', help='site locations path')
+
 
     def parse(self):
             return self.args

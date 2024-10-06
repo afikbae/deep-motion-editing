@@ -34,10 +34,10 @@ class BVH_file:
         self.joint_num = self.anim.rotations.shape[1]
         self.frame_num = self.anim.rotations.shape[0]
 
-        self.anim.offsets[0, 2] += 15
-        self.anim.positions[:, 0, 2] += 15
+        self.normalization_factor = self.normalize()
 
-        self.normalize()
+        self.anim.offsets[0, 2] += 6.5
+        self.anim.positions[:, 0, 2] += 6.5
 
     @property
     def topology(self):
@@ -52,9 +52,10 @@ class BVH_file:
         height = self.get_height() / global_scale
         self.anim.offsets /= height
         self.anim.positions /= height
-        mean_position = np.mean(self.anim.positions[:, 0, :], axis=0)
-        self.anim.positions[:, 0, 0] -= mean_position[0]
-        self.anim.positions[:, 0, 1] -= mean_position[1]
+        #mean_position = np.mean(self.anim.positions[:, 0, :], axis=0)
+        #self.anim.positions[:, 0, 0] -= mean_position[0]
+        #self.anim.positions[:, 0, 1] -= mean_position[1]
+        return height
 
 
     def get_height(self):
@@ -183,7 +184,7 @@ def load_bvh(file_name):
     bpy.ops.object.select_all(action='DESELECT')
     print('Load bvh all done!')
 
-    return all_obj
+    return all_obj, file.normalization_factor
 
 
 if __name__ == '__main__':
