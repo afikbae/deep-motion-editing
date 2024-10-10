@@ -29,7 +29,7 @@ def add_light(location):
     return sun
 
 
-def make_scene(floor_size=1000, camera_position=(37.54, -28.87, 16.34), camera_rotation=(1.30473, 0.0109881, 0.896417),
+def make_scene(floor_size=10, camera_position=(19.736, -15.208, 12.34), camera_rotation=(1.30473, 0.0109881, 0.896417),
                light_position=(0, 0, 20)):
     floor = add_floor(floor_size)
     camera = add_camera(camera_position, camera_rotation)

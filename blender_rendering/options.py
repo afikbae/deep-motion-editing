@@ -26,7 +26,7 @@ class Options:
         self.parser.add_argument('--render', action='store_true', default=False, help='render an output video')
         # rendering parameters
         self.parser.add_argument('--frame_end', type=int, default=100, help='the index of the last rendered frame')
-        self.parser.add_argument('--resX', type=int, default=960, help='x resolution')
+        self.parser.add_argument('--resX', type=int, default=400, help='x resolution')
         self.parser.add_argument('--resY', type=int, default=540, help='y resolution')
 
         self.parser.add_argument('--site_locations_path', type=str, default='', help='site locations path')
