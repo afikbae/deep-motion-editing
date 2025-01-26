@@ -41,9 +41,13 @@ def animate_spheres(spheres, positions, frame_num):
 
     bpy.context.scene.frame_current = 0
 
-def load_and_animate_sites(json_file_path, normalization_factor):
+def load_and_animate_sites(json_file_path, normalization_factor, mean_position):
     positions, frame_num = load_sites(json_file_path)
     positions /= normalization_factor
-    positions[:,:,2] += 6.5
+    # positions[:,:,2] += 6.5
+    if positions.shape[0] != mean_position.shape[0]:
+    	return
+    positions[:,:,0] -= mean_position[:,0][:,np.newaxis]
+    positions[:,:,1] -= mean_position[:,1][:,np.newaxis]
     spheres = create_spheres()
     animate_spheres(spheres, positions, frame_num)

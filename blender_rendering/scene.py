@@ -28,8 +28,10 @@ def add_light(location):
     sun = bpy.context.object
     return sun
 
+from math import pi
 
-def make_scene(floor_size=10, camera_position=(19.736, -15.208, 12.34), camera_rotation=(1.30473, 0.0109881, 0.896417),
+# def make_scene(floor_size=100, camera_position=(67.0, -10.0, 13), camera_rotation=(79.0*pi/180, 0.0, 69*pi/180),
+def make_scene(floor_size=100, camera_position=(19.736, -15.208, 12.34), camera_rotation=(1.30473, 0.0109881, 0.896417),
                light_position=(0, 0, 20)):
     floor = add_floor(floor_size)
     camera = add_camera(camera_position, camera_rotation)

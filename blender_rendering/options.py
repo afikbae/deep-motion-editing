@@ -30,6 +30,7 @@ class Options:
         self.parser.add_argument('--resY', type=int, default=540, help='y resolution')
 
         self.parser.add_argument('--site_locations_path', type=str, default='', help='site locations path')
+        self.parser.add_argument('--not_still_frames_path', type=str, default='', help='not still frames path')
 
 
     def parse(self):

@@ -9,7 +9,7 @@ import mathutils
 import pdb
 
 #scale factor for bone length
-global_scale = 1
+global_scale = 10
 
 class BVH_file:
     def __init__(self, file_path):
@@ -34,10 +34,10 @@ class BVH_file:
         self.joint_num = self.anim.rotations.shape[1]
         self.frame_num = self.anim.rotations.shape[0]
 
-        self.normalization_factor = self.normalize()
+        self.normalization_factor, self.mean_position = self.normalize()
 
-        self.anim.offsets[0, 2] += 6.5
-        self.anim.positions[:, 0, 2] += 6.5
+        # self.anim.offsets[0, 2] += 6.5
+        # self.anim.positions[:, 0, 2] += 6.5
 
     @property
     def topology(self):
@@ -49,16 +49,24 @@ class BVH_file:
 
     # Normalize bone length by height and translate the (x, y) mean to (0, 0)
     def normalize(self):
-        height = self.get_height() / global_scale
+        high, low = self.get_high_low()
+        height = high - low
+        height /= global_scale
         self.anim.offsets /= height
         self.anim.positions /= height
-        #mean_position = np.mean(self.anim.positions[:, 0, :], axis=0)
-        #self.anim.positions[:, 0, 0] -= mean_position[0]
-        #self.anim.positions[:, 0, 1] -= mean_position[1]
-        return height
+        mean_position = self.anim.positions[:, 0, :].copy()
+        self.anim.positions[:, 0, 0] -= mean_position[:,0]
+        self.anim.positions[:, 0, 1] -= mean_position[:,1]
+        # self.anim.positions[:,0,2] -= low
+        print(mean_position)
+        return height, mean_position
 
 
     def get_height(self):
+        high, low = self.get_high_low()
+        return high - low
+
+    def get_high_low(self):
         low = high = 0
 
         def dfs(i, pos):
@@ -73,7 +81,7 @@ class BVH_file:
 
         dfs(0, np.array([0, 0, 0]))
 
-        return high - low
+        return high,low
 
 
 def add_bone(offset, parent_obj, name):
@@ -86,7 +94,7 @@ def add_bone(offset, parent_obj, name):
     theta = np.math.acos(base.dot(target))
     rot = mathutils.Quaternion(axis, theta)
 
-    bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=0.11 * global_scale, radius2=0.066 * global_scale, depth=length, enter_editmode=False, location=center)
+    bpy.ops.mesh.primitive_cone_add(vertices=5, radius1=0.0145 * global_scale, radius2=0.0087 * global_scale, depth=length, enter_editmode=False, location=center)
     new_bone = bpy.context.object
     new_bone.name = name
     new_bone.rotation_mode = 'QUATERNION'
@@ -184,7 +192,7 @@ def load_bvh(file_name):
     bpy.ops.object.select_all(action='DESELECT')
     print('Load bvh all done!')
 
-    return all_obj, file.normalization_factor
+    return all_obj, file.normalization_factor, file.mean_position
 
 
 if __name__ == '__main__':
